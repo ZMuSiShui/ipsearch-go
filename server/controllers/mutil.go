@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"fmt"
+	"net"
 	"regexp"
 	"strings"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/ZMuSiShui/ipsearch-go/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/ipipdotnet/ipdb-go"
+	"github.com/oschwald/geoip2-golang"
 )
 
 var validIPDBs = []string{"ipip", "maxmind", "qqzeng", "cz88"}
@@ -55,9 +57,7 @@ func searchIP(data searchReq) (ipinfo string, err error) {
 		ipinfo, err = searchIPbyIPIP(iplist)
 	} else if data.IPDB == "maxmind" {
 		ipinfo, err = searchIPbyMaxmind(iplist)
-	} else if data.IPDB == "maxmind" {
-		ipinfo, err = searchIPbyQQZeng(iplist)
-	} else if data.IPDB == "maxmind" {
+	} else if data.IPDB == "cz88" {
 		ipinfo, err = searchIPbyCZ88(iplist)
 	} else {
 		ipinfo, err = searchIPbyMaxmind(iplist)
@@ -67,35 +67,96 @@ func searchIP(data searchReq) (ipinfo string, err error) {
 
 // 从 IPIP 数据库查询
 func searchIPbyIPIP(ipdata []string) (ipinfolist string, err error) {
-	db, eErr := ipdb.NewCity(conf.IPIPFile)
-	if eErr != nil {
-		return "", eErr
+	db, err := ipdb.NewCity(conf.IPIPFile)
+	if err != nil {
+		return
 	}
 	for _, i := range ipdata {
 		i = strings.TrimSpace(i)
 		iplist := strings.Split(i, "/")
-		ipdata, err := db.FindInfo(iplist[0], "CN")
-		if err != nil {
-			return "", err
+		ipAddress := net.ParseIP(iplist[0])
+		if ipAddress == nil {
+			ipinfolist = ipinfolist + fmt.Sprintf("%s 该 IP 格式不正确\n", i)
+		} else {
+			ipdata, err := db.FindInfo(iplist[0], "CN")
+			if err != nil {
+				return "", err
+			}
+			ipinfo := fmt.Sprintf("%s %s %s %s %s %s %s", i, ipdata.CountryName, ipdata.RegionName, ipdata.CityName, ipdata.OwnerDomain, ipdata.IspDomain, ipdata.CountryCode)
+			reg := regexp.MustCompile("\\s+")
+			ipinfolist += reg.ReplaceAllString(ipinfo, " ")
+			ipinfolist = ipinfolist + "\n"
 		}
-		ipinfo := fmt.Sprintf("%s %s %s %s %s %s %s\n", i, ipdata.CountryName, ipdata.RegionName, ipdata.CityName, ipdata.OwnerDomain, ipdata.IspDomain, ipdata.CountryCode)
-		reg := regexp.MustCompile("\\s+")
-		ipinfolist += reg.ReplaceAllString(ipinfo, "")
 	}
 	return
 }
 
 // 从 Maxmind 数据库查询
-func searchIPbyMaxmind(ipdata []string) (ipinfo string, err error) {
-	return
-}
+func searchIPbyMaxmind(ipdata []string) (ipinfolist string, err error) {
+	db, err := geoip2.Open(conf.MaxmindFile)
+	if err != nil {
+		return
+	}
+	defer db.Close()
+	for _, i := range ipdata {
+		i = strings.TrimSpace(i)
+		iplist := strings.Split(i, "/")
+		ipAddress := net.ParseIP(iplist[0])
+		if ipAddress == nil {
+			ipinfolist = ipinfolist + fmt.Sprintf("%s 该 IP 格式不正确\n", i)
+		} else {
+			ip := net.ParseIP(iplist[0])
+			record, err := db.City(ip)
+			if err != nil {
+				return "", err
+			}
+			var countryName string
+			var cityName string
+			if record.Country.Names["zh-CN"] != "" {
+				countryName = record.Country.Names["zh-CN"]
+			} else {
+				countryName = record.Country.Names["en"]
+			}
+			if record.City.Names["zh-CN"] != "" {
+				cityName = record.City.Names["zh-CN"]
+			} else {
+				cityName = record.City.Names["en"]
+			}
+			ipinfo := fmt.Sprintf("%s %s %s %s", i, countryName, cityName, record.Location.TimeZone)
+			ipinfo = strings.Replace(ipinfo, "None", "", -1)
+			reg := regexp.MustCompile("\\s+")
+			ipinfolist += reg.ReplaceAllString(ipinfo, " ")
+			ipinfolist = ipinfolist + "\n"
+		}
+	}
 
-// 从 QQZeng 数据库查询
-func searchIPbyQQZeng(ipdata []string) (ipinfo string, err error) {
 	return
 }
 
 // 从 CZ88 数据库查询
-func searchIPbyCZ88(ipdata []string) (ipinfo string, err error) {
+func searchIPbyCZ88(ipdata []string) (ipinfolist string, err error) {
+	IPDict := util.NewIPDict()
+	err = IPDict.Load(conf.CZ88File)
+	if err != nil {
+		return
+	}
+	for _, i := range ipdata {
+		i = strings.TrimSpace(i)
+		iplist := strings.Split(i, "/")
+		ipAddress := net.ParseIP(iplist[0])
+		if ipAddress == nil {
+			ipinfolist = ipinfolist + fmt.Sprintf("%s 该 IP 格式不正确\n", i)
+		} else {
+			res, err := IPDict.FindIP(iplist[0])
+			if err != nil {
+				return "", err
+			}
+			ipinfo := fmt.Sprintf("%s %s %s", i, res.Country, res.Area)
+			reg := regexp.MustCompile("\\s+")
+			ipinfolist += reg.ReplaceAllString(ipinfo, " ")
+			ipinfolist = ipinfolist + "\n"
+		}
+
+	}
 	return
 }

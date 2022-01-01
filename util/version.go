@@ -35,7 +35,7 @@ func VersionCompare(version1, version2 string) int {
 
 func PrintLogo() {
 	fmt.Print(`
-	               _ooOoo_
+                   _ooOoo_
                   o8888888o
                   88" . "88
                   (| -_- |)
@@ -53,6 +53,7 @@ func PrintLogo() {
      \  \ '-.   \_ __\ /__ _/   .-' /  /
 ======'-.____'-.___\_____/___.-'____.-'======
                    '=-='
-
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+            佛祖保佑       永无BUG
 `)
 }
