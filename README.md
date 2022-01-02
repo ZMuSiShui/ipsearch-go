@@ -8,3 +8,10 @@
 
 ## 待完善 ##
 - IP 数据库自动更新
+
+## 使用 ## 
+    git clone https://github.com/ZMuSiShui/ipsearch-go.git
+    go run cmd/app.go
+
+    批量查询 http(s)://your.domain/
+    单个API  http(s)://your.domain/api/1.1.1.1
