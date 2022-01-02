@@ -2,7 +2,7 @@
 [![Develop on Okteto](https://okteto.com/develop-okteto.svg)](https://cloud.okteto.com/deploy?repository=https://github.com/ZMuSiShui/ipsearch-go)
 
 ## 功能 ##
-- 使用 IPIP 、 Maxmind 、 CZ88 IP数据库
+- 使用 IPIP 、 Maxmind 、 CZ88 IP数据库(数据库请自行更新，本项目使用数据均为网络公开数据库)
 - 支持批量查询和单个API接口
 - 支持 一键部署至Okteto
 
