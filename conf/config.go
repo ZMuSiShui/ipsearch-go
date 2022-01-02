@@ -3,7 +3,7 @@ package conf
 // 常量定义
 const (
 	AppName     string = "IPSearch-backend-go"
-	VERSION     string = "1.0"
+	VERSION     string = "1.1"
 	IPIPFile    string = "data/ipip.ipdb"
 	IPIPURL     string = "https://eu.191013.xyz/src/ipip.ipdb"
 	MaxmindFile string = "data/maxmind.mmdb"
