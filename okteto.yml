@@ -1,5 +1,4 @@
 name: okteto-ipsearch-go
-autocreate: true
 image: okteto/golang:1
 command: bash
 securityContext:
