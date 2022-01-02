@@ -36,37 +36,32 @@ var validwebdb string = "web"
 
 func SingelSearch(c *fiber.Ctx) error {
 	const ipApiBaseURL string = "http://ip-api.com/json/%s?lang=zh-CN"
-	var search searchReq
-	if err := c.BodyParser(&search); err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"msg": "miss data",
-		})
-	}
-	if search.IPDB != "" && search.IPDB != validwebdb {
-		err := fmt.Sprintf("Error: IPDB must be : %s.", validwebdb)
-		return c.Status(400).JSON(fiber.Map{
-			"msg": err,
-		})
-	}
-	ipdata := strings.TrimSpace(search.IPData)
+	ipdata := c.Params("*")
+	ipdata = strings.TrimSpace(ipdata)
 	iplist := strings.Split(ipdata, "/")
 	ipAddress := net.ParseIP(iplist[0])
 	if ipAddress == nil {
-		return c.Status(400).JSON(fiber.Map{
-			"msg": "该 IP 格式不正确",
+		return c.JSON(fiber.Map{
+			"code": 40000,
+			"msg":  "Failed",
+			"data": "该 IP 格式不正确",
 		})
 	}
 
 	data, err := searchIPbyIPAPI(ipApiBaseURL, iplist[0])
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"msg": err,
+		return c.JSON(fiber.Map{
+			"code": 40000,
+			"msg":  "Failed",
+			"data": err,
 		})
 	}
 	jsonBytes, err := json.Marshal(data)
 	if err != nil {
-		return c.Status(400).JSON(fiber.Map{
-			"msg": "查询失败",
+		return c.JSON(fiber.Map{
+			"code": 40000,
+			"msg":  "Failed",
+			"data": "查询失败",
 		})
 	}
 	var msgData map[string]interface{}

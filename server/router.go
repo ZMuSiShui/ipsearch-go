@@ -12,6 +12,6 @@ func Router(app *fiber.App) {
 	api := app.Group("/api")
 	{
 		api.Post("/mutil", controllers.MutilSearch)
-		api.Post("/single", controllers.SingelSearch)
+		api.Get("/*", controllers.SingelSearch)
 	}
 }
