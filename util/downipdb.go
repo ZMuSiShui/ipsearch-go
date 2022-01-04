@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"mime"
 	"net/http"
-	"os"
 	"path/filepath"
 	"strconv"
 	"sync"
@@ -171,7 +170,7 @@ func (d *fileDownload) downloadPart(c filePart) (err error) {
 // 合并下载的文件
 func (d *fileDownload) mergeFileParts() (err error) {
 	log.Infof("开始合并文件")
-	mergedFile, err := os.Create(d.outFileName)
+	mergedFile, err := CreatNestedFile(d.outFileName)
 	if err != nil {
 		return
 	}

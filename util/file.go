@@ -12,6 +12,9 @@ import (
 
 // 确定文件是否存在
 func FileExists(file string) bool {
+	if file == "" {
+		return false
+	}
 	info, err := os.Stat(file)
 	return err == nil && !info.IsDir()
 }
