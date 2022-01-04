@@ -9,12 +9,12 @@ import (
 	"github.com/ZMuSiShui/ipsearch-go/conf"
 	"github.com/ZMuSiShui/ipsearch-go/util"
 	"github.com/gofiber/fiber/v2"
-	"github.com/ip2location/ip2location-go/v9"
+	"github.com/ip2location/ip2location-go"
 	"github.com/ipipdotnet/ipdb-go"
 	"github.com/oschwald/geoip2-golang"
 )
 
-var validIPDBs = []string{"ipip", "maxmind", "IP2Location"}
+var validIPDBs = []string{"ipip", "maxmind", "IP2Location", "CZ88"}
 
 type searchReq struct {
 	IPDB   string `json:"ipdb"`
@@ -60,6 +60,8 @@ func searchIP(data searchReq) (ipinfo string, err error) {
 		ipinfo, err = searchIPbyMaxmind(iplist)
 	} else if data.IPDB == "IP2Location" {
 		ipinfo, err = searchIPbyIP2L(iplist)
+	} else if data.IPDB == "CZ88" {
+		ipinfo, err = searchIPbyCZ88(iplist)
 	} else {
 		ipinfo, err = searchIPbyMaxmind(iplist)
 	}
@@ -140,33 +142,36 @@ func searchIPbyMaxmind(ipdata []string) (ipinfolist string, err error) {
 	return
 }
 
-// // 从 CZ88 数据库查询
-// func searchIPbyCZ88(ipdata []string) (ipinfolist string, err error) {
-// 	IPDict := util.NewIPDict()
-// 	err = IPDict.Load(conf.CZ88File)
-// 	if err != nil {
-// 		return
-// 	}
-// 	for _, i := range ipdata {
-// 		i = strings.TrimSpace(i)
-// 		iplist := strings.Split(i, "/")
-// 		ipAddress := net.ParseIP(iplist[0])
-// 		if ipAddress == nil {
-// 			ipinfolist = ipinfolist + fmt.Sprintf("%s 该 IP 格式不正确\n", i)
-// 		} else {
-// 			res, err := IPDict.FindIP(iplist[0])
-// 			if err != nil {
-// 				return "", err
-// 			}
-// 			ipinfo := fmt.Sprintf("%s %s %s", i, res.Country, res.Area)
-// 			reg := regexp.MustCompile(`\\s+`)
-// 			ipinfolist += reg.ReplaceAllString(ipinfo, " ")
-// 			ipinfolist = ipinfolist + "\n"
-// 		}
+// 从 CZ88 数据库查询
+func searchIPbyCZ88(ipdata []string) (ipinfolist string, err error) {
+	IPDict := util.NewIPDict()
+	err = IPDict.Load(conf.CZ88File)
+	if err != nil {
+		return
+	}
+	for _, i := range ipdata {
+		i = strings.TrimSpace(i)
+		iplist := strings.Split(i, "/")
+		if iplist[0] == "" {
+			continue
+		}
+		ipAddress := net.ParseIP(iplist[0])
+		if ipAddress == nil {
+			ipinfolist = ipinfolist + fmt.Sprintf("%s 该 IP 格式不正确\n", i)
+		} else {
+			res, err := IPDict.FindIP(iplist[0])
+			if err != nil {
+				return "", err
+			}
+			ipinfo := fmt.Sprintf("%s %s %s", i, res.Country, res.Area)
+			reg := regexp.MustCompile(`\\s+`)
+			ipinfolist += reg.ReplaceAllString(ipinfo, " ")
+			ipinfolist = ipinfolist + "\n"
+		}
 
-// 	}
-// 	return
-// }
+	}
+	return
+}
 
 func searchIPbyIP2L(ipdata []string) (ipinfolist string, err error) {
 	db, err := ip2location.OpenDB(conf.IP2LocationFile)

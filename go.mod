@@ -4,7 +4,7 @@ go 1.17
 
 require (
 	github.com/gofiber/fiber/v2 v2.24.0
-	github.com/ip2location/ip2location-go/v9 v9.2.0
+	github.com/ip2location/ip2location-go v8.3.0+incompatible
 	github.com/ipipdotnet/ipdb-go v1.3.1
 	github.com/matryer/try v0.0.0-20161228173917-9ac251b645a2
 	github.com/oschwald/geoip2-golang v1.5.0

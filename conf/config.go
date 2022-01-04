@@ -10,6 +10,8 @@ const (
 	MaxmindURL      string = "https://eu.191013.xyz/src/maxmind.mmdb"
 	IP2LocationFile string = "data/ip2location.bin"
 	IP2LocationURL  string = "https://eu.191013.xyz/src/ip2location.bin"
+	CZ88File        string = "data/cz88.dat"
+	CZ88URL         string = "https://eu.191013.xyz/src/cz88.dat"
 )
 
 // 变量定义
