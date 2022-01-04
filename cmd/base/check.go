@@ -1,6 +1,8 @@
 package base
 
 import (
+	"runtime"
+
 	"github.com/ZMuSiShui/ipsearch-go/conf"
 	"github.com/ZMuSiShui/ipsearch-go/util"
 	log "github.com/sirupsen/logrus"
@@ -30,7 +32,7 @@ func InitIPDB() {
 func CheckIPDBFlie(path string, ipdburl string) bool {
 	if !util.FileExists(path) {
 		log.Infof("IPDB file not exists, Download default IPDB file")
-		err := util.DownloadIPDB(path, ipdburl)
+		err := util.StartDownload(ipdburl, path, runtime.NumCPU(), "")
 		if err != nil {
 			log.Fatalf("Failed to download ipdb file. Error: %s", err)
 		}
