@@ -16,8 +16,8 @@ func InitIPDB() {
 		log.Fatalf("Check IPIP File Failed")
 	}
 
-	log.Infof("Check CZ88 IPDB File: %s", conf.CZ88File)
-	if !CheckIPDBFlie(conf.CZ88File, conf.CZ88URL) {
+	log.Infof("Check IP2Location IPDB File: %s", conf.IP2LocationFile)
+	if !CheckIPDBFlie(conf.IP2LocationFile, conf.IP2LocationURL) {
 		log.Fatalf("Check IPIP File Failed")
 	}
 }

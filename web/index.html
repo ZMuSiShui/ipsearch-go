@@ -35,11 +35,11 @@
                             MAXMIND
                         </a>
                     </li>
-                    <!-- <li class="tab-item" :class="cz88" v-on:click="active('cz88')">
-                        <a href="#cz88">
-                            CZ88
+                    <li class="tab-item" :class="IP2Location" v-on:click="active('IP2Location')">
+                        <a href="#IP2Location">
+                            IP2Location
                         </a>
-                    </li> -->
+                    </li>
                     <li class="tab-item tab-action">
                         <button class="btn btn-primary btn-sm input-group-btn" v-on:click="search">Search</button>
                     </li>
@@ -85,7 +85,7 @@
             ipip: "active",
             maxmind: "",
             qqzeng: "",
-            cz88: "",
+            IP2Location: "",
             iplist: {
                 ipdb: "ipip",
             },
@@ -96,19 +96,18 @@
                 if (i == "ipip") {
                     this.ipip = "active"
                     this.maxmind = ""
-                    this.cz88 = ""
+                    this.IP2Location = ""
                     this.iplist.ipdb = "ipip"
                 } else if (i == "maxmind") {
                     this.ipip = ""
                     this.maxmind = "active"
-                    this.cz88 = ""
+                    this.IP2Location = ""
                     this.iplist.ipdb = "maxmind"
-                // } else {
-                //     this.ipip = ""
-                //     this.maxmind = ""
-                //     this.qqzeng = ""
-                //     this.cz88 = "active"
-                //     this.iplist.ipdb = "cz88"
+                } else {
+                    this.ipip = ""
+                    this.maxmind = ""
+                    this.IP2Location = "active"
+                    this.iplist.ipdb = "IP2Location"
                 }
             },
             search: function () {

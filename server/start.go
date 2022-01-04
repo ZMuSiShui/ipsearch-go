@@ -26,6 +26,6 @@ func Start() {
 	Router(app)
 	// app.Get("/dashboard", monitor.New()) // 代码运行监视器，开发环境使用
 	// 启动
-	log.Fatal(app.Listen(":8080")) // linux环境
-	// log.Fatal(app.Listen("127.0.0.1:3000")) // windows环境
+	// log.Fatal(app.Listen(":8080")) // linux环境
+	log.Fatal(app.Listen("127.0.0.1:3000")) // windows环境
 }
