@@ -1,13 +1,14 @@
 package util
 
 import (
-	"crypto/sha256"
+	"crypto/md5"
 	"encoding/hex"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"mime"
 	"net/http"
+	"os"
 	"path/filepath"
 	"strconv"
 	"sync"
@@ -170,17 +171,16 @@ func (d *fileDownload) downloadPart(c filePart) (err error) {
 // 合并下载的文件
 func (d *fileDownload) mergeFileParts() (err error) {
 	log.Infof("开始合并文件")
-	if !FileExists(d.outFileName) {
-		_, err := CreatNestedFile(d.outFileName)
-		if err != nil {
-			return err
-		}
+	mergedFile, err := os.Create(d.outFileName)
+	if err != nil {
+		return
 	}
+	defer mergedFile.Close()
 
-	fileMd5 := sha256.New()
+	fileMd5 := md5.New()
 	totalSize := 0
 	for _, s := range d.doneFilePart {
-		err := ioutil.WriteFile(d.outFileName, s.Data, 0777)
+		_, err := mergedFile.Write(s.Data)
 		if err != nil {
 			return err
 		}
@@ -193,6 +193,7 @@ func (d *fileDownload) mergeFileParts() (err error) {
 
 	if d.md5 != "" {
 		if hex.EncodeToString(fileMd5.Sum(nil)) != d.md5 {
+			log.Errorf("MD5: %v", hex.EncodeToString(fileMd5.Sum(nil)))
 			return errors.New("文件损坏")
 		} else {
 			log.Info("文件校验成功")
