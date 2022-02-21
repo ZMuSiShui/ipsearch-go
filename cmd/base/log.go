@@ -1,7 +1,7 @@
 package base
 
 import (
-	"github.com/ZMuSiShui/ipsearch-go/conf"
+	"github.com/nekomi-cn/ipsearch-go/conf"
 	log "github.com/sirupsen/logrus"
 )
 

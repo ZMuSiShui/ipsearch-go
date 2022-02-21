@@ -3,8 +3,8 @@ package base
 import (
 	"runtime"
 
-	"github.com/ZMuSiShui/ipsearch-go/conf"
-	"github.com/ZMuSiShui/ipsearch-go/util"
+	"github.com/nekomi-cn/ipsearch-go/conf"
+	"github.com/nekomi-cn/ipsearch-go/util"
 	log "github.com/sirupsen/logrus"
 )
 

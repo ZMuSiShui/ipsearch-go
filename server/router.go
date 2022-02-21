@@ -1,7 +1,7 @@
 package server
 
 import (
-	"github.com/ZMuSiShui/ipsearch-go/server/controllers"
+	"github.com/nekomi-cn/ipsearch-go/server/controllers"
 	"github.com/gofiber/fiber/v2"
 )
 

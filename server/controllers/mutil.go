@@ -6,8 +6,8 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/ZMuSiShui/ipsearch-go/conf"
-	"github.com/ZMuSiShui/ipsearch-go/util"
+	"github.com/nekomi-cn/ipsearch-go/conf"
+	"github.com/nekomi-cn/ipsearch-go/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/ip2location/ip2location-go"
 	"github.com/ipipdotnet/ipdb-go"

@@ -6,10 +6,10 @@ import (
 
 	log "github.com/sirupsen/logrus"
 
-	"github.com/ZMuSiShui/ipsearch-go/cmd/base"
-	"github.com/ZMuSiShui/ipsearch-go/conf"
-	"github.com/ZMuSiShui/ipsearch-go/server"
-	"github.com/ZMuSiShui/ipsearch-go/util"
+	"github.com/nekomi-cn/ipsearch-go/cmd/base"
+	"github.com/nekomi-cn/ipsearch-go/conf"
+	"github.com/nekomi-cn/ipsearch-go/server"
+	"github.com/nekomi-cn/ipsearch-go/util"
 )
 
 func init() {
