@@ -2,7 +2,9 @@ FROM golang:1.17 as builder
 RUN mkdir -p /go/src/
 WORKDIR /go/src/
 ADD . /go/src/
-RUN cd cmd && CGO_ENABLE=0 GOOS=linux go build -o app .
+RUN cd cmd; \
+        go mod tidy; \
+        CGO_ENABLE=0 GOOS=linux GOARCH=amd64 go build -o app .
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
