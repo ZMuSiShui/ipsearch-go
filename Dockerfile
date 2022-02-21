@@ -8,5 +8,6 @@ RUN apk --no-cache add ca-certificates
 WORKDIR /root/
 COPY --from=builder /go/src/app .
 COPY ./web/ web/
+RUN ls
 EXPOSE 8080
-CMD [ "./app", "-debug" ]
+CMD [ "./app" ]
