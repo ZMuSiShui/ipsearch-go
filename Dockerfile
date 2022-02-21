@@ -6,7 +6,7 @@ RUN cd cmd/ && \
     export GO111MODULE=on && \
     export GOPROXY=https://goproxy.cn && \
     go mod tidy && \
-    CGO_ENABLE=0 GOOS=linux go build -o app cmd/app.go
+    CGO_ENABLE=0 GOOS=linux go build -o app .
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
