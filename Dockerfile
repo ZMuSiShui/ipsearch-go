@@ -9,4 +9,4 @@ WORKDIR /root/
 COPY --from=builder /go/src/app .
 COPY ./web/ web/
 EXPOSE 8080
-CMD ["./app"]
+CMD [ "./app", "-debug" ]
