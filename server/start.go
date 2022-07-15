@@ -1,9 +1,17 @@
+/*
+ * @Author: iRorikon
+ * @Date: 2022-06-22 14:22:01
+ * @FilePath: \ipsearch-go\server\start.go
+ */
 package server
 
 import (
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/compress"
 	"github.com/gofiber/fiber/v2/middleware/cors"
+	"github.com/nekomi-cn/ipsearch-go/config"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -26,5 +34,6 @@ func Start() {
 	Router(app)
 	// app.Get("/dashboard", monitor.New()) // 代码运行监视器，开发环境使用
 	// 启动
-	log.Fatal(app.Listen(":8080"))
+	// log.Fatal(app.Listen(":8080"))
+	log.Fatal(app.Listen(fmt.Sprintf("%s:%v", config.CFG.System.Address, config.CFG.System.Port)))
 }

@@ -6,6 +6,7 @@ require (
 	github.com/gofiber/fiber/v2 v2.27.0
 	github.com/ip2location/ip2location-go v8.3.0+incompatible
 	github.com/ipipdotnet/ipdb-go v1.3.1
+	github.com/kirinlabs/HttpRequest v1.1.1
 	github.com/matryer/try v0.0.0-20161228173917-9ac251b645a2
 	github.com/oschwald/geoip2-golang v1.6.1
 	github.com/sirupsen/logrus v1.8.1

@@ -6,11 +6,12 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/nekomi-cn/ipsearch-go/conf"
-	"github.com/nekomi-cn/ipsearch-go/util"
 	"github.com/gofiber/fiber/v2"
 	"github.com/ip2location/ip2location-go"
 	"github.com/ipipdotnet/ipdb-go"
+	"github.com/nekomi-cn/ipsearch-go/config"
+	"github.com/nekomi-cn/ipsearch-go/service"
+	"github.com/nekomi-cn/ipsearch-go/util"
 	"github.com/oschwald/geoip2-golang"
 )
 
@@ -70,7 +71,7 @@ func searchIP(data searchReq) (ipinfo string, err error) {
 
 // 从 IPIP 数据库查询
 func searchIPbyIPIP(ipdata []string) (ipinfolist string, err error) {
-	db, err := ipdb.NewCity(conf.IPIPFile)
+	db, err := ipdb.NewCity(fmt.Sprintf(config.IPIPFile))
 	if err != nil {
 		return
 	}
@@ -99,7 +100,7 @@ func searchIPbyIPIP(ipdata []string) (ipinfolist string, err error) {
 
 // 从 Maxmind 数据库查询
 func searchIPbyMaxmind(ipdata []string) (ipinfolist string, err error) {
-	db, err := geoip2.Open(conf.MaxmindFile)
+	db, err := geoip2.Open(config.MaxmindFile)
 	if err != nil {
 		return
 	}
@@ -144,8 +145,8 @@ func searchIPbyMaxmind(ipdata []string) (ipinfolist string, err error) {
 
 // 从 CZ88 数据库查询
 func searchIPbyCZ88(ipdata []string) (ipinfolist string, err error) {
-	IPDict := util.NewIPDict()
-	err = IPDict.Load(conf.CZ88File)
+	IPDict := service.NewIPDict()
+	err = IPDict.Load(config.CZ88File)
 	if err != nil {
 		return
 	}
@@ -174,7 +175,7 @@ func searchIPbyCZ88(ipdata []string) (ipinfolist string, err error) {
 }
 
 func searchIPbyIP2L(ipdata []string) (ipinfolist string, err error) {
-	db, err := ip2location.OpenDB(conf.IP2LocationFile)
+	db, err := ip2location.OpenDB(config.IP2LocationFile)
 	if err != nil {
 		return
 	}
