@@ -6,7 +6,7 @@ RUN go mod tidy && \
 FROM alpine:latest
 RUN apk --no-cache add ca-certificates
 WORKDIR /root/
-COPY --from=builder /root/cmd/app .
+COPY --from=builder /root/app .
 COPY ./web/ web/
 EXPOSE 8080
 CMD [ "./app" ]
